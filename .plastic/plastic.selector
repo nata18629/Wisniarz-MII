@@ -1,4 +1,0 @@
-repository "labyMII@nata18629_unity@cloud"
-  path "/"
-    br "/main"
-    co "/main"

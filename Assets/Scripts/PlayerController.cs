@@ -83,11 +83,25 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    void Kill()
+    {
+        lives -= 1;
+        if (lives == 0)
+        {
+            Debug.Log("Game over");
+        }
+        else
+        {
+            Debug.Log("Lives left: " + lives);
+            transform.position = start_pos;
+        }
+    }
+
     void OnTriggerEnter2D(Collider2D col)
     {
         if (col.tag == "FallLevel")
         {
-            Debug.Log("Kill");
+            Kill();
         }
         if (col.CompareTag("Bonus"))
         {
@@ -107,16 +121,7 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                lives -= 1;
-                if (lives == 0)
-                {
-                    Debug.Log("Game over");
-                }
-                else
-                {
-                    Debug.Log("Lives left: " + lives);
-                    transform.position = start_pos;
-                }
+                Kill();
             }
         }
         if (col.CompareTag("Key"))
