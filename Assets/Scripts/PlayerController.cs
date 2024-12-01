@@ -32,6 +32,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(GameManager.instance.currentGameState == GameManager.GameState.GAME)
         is_walking = false;
         if (Input.GetKey(KeyCode.RightArrow))
         {
