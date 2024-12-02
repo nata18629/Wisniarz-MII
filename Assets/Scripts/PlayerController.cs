@@ -16,9 +16,7 @@ public class PlayerController : MonoBehaviour
     private float vertical;
     private int lives = 3;
     private Vector2 start_pos;
-     int keys_found = 0;
 
-    private int score = 0;
     public LayerMask groundLayer;
     const float rayLength = 1.2f;
     const int KEYS_NUM = 3;
@@ -106,8 +104,7 @@ public class PlayerController : MonoBehaviour
         }
         if (col.CompareTag("Bonus"))
         {
-            score += 100;
-            Debug.Log("Score: " + score);
+            GameManager.instance.AddPoints(100);
             col.gameObject.SetActive(false);
         }
         if (col.CompareTag("Ladder"))
@@ -127,8 +124,7 @@ public class PlayerController : MonoBehaviour
         }
         if (col.CompareTag("Key"))
         {
-            keys_found += 1;
-            Debug.Log("Key found");
+            GameManager.instance.AddKeys();
             col.gameObject.SetActive(false);
 
             //if (keys_found == KEYS_NUM)
@@ -144,15 +140,7 @@ public class PlayerController : MonoBehaviour
         }
         if (col.CompareTag("END"))
         {
-            if (keys_found == KEYS_NUM)
-            {
-                Debug.Log("Win");
-            }
-            else
-            {
-                Debug.Log("Lose");
-
-            }
+                Debug.Log("END");
         }
         if (col.CompareTag("MovingPlatform"))
         {

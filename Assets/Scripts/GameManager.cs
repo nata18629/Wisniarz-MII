@@ -16,6 +16,8 @@ public class GameManager : MonoBehaviour
     public GameState currentGameState = GameState.PAUSE_MENU;
     static public GameManager instance;
     public TMP_Text scoreText;
+    public Image[] keysTab;
+    int keys_found = 0;
     int score = 0;
 
     // Start is called before the first frame update
@@ -45,6 +47,10 @@ public class GameManager : MonoBehaviour
         if(instance == null)
         {
             instance = this;
+            for(int i=0; i<keys_found; i++)
+            {
+                keysTab[i].color=Color.grey;
+            }
         }
         else
         {
@@ -56,6 +62,13 @@ public class GameManager : MonoBehaviour
     {
         score += points;
         scoreText.text = score.ToString();
+    }
+
+    public void AddKeys()
+    {
+        keysTab[keys_found].color = Color.red;
+        keys_found++;
+        
     }
 
     void SetGameState(GameState newGameState)
