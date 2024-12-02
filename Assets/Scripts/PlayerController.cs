@@ -30,36 +30,38 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(GameManager.instance.currentGameState == GameManager.GameState.GAME)
-        is_walking = false;
-        if (Input.GetKey(KeyCode.RightArrow))
+        if (GameManager.instance.currentGameState == GameManager.GameState.GAME)
         {
-            transform.Translate(moveSpeed * Time.deltaTime, 0.0f, 0.0f, Space.World);
-            is_walking = true;
-            if (!is_facing_right)
+            is_walking = false;
+            if (Input.GetKey(KeyCode.RightArrow))
             {
-                Flip();
+                transform.Translate(moveSpeed * Time.deltaTime, 0.0f, 0.0f, Space.World);
+                is_walking = true;
+                if (!is_facing_right)
+                {
+                    Flip();
+                }
             }
-        }
-        if (Input.GetKey(KeyCode.LeftArrow))
-        {
-            transform.Translate(-moveSpeed * Time.deltaTime, 0.0f, 0.0f, Space.World);
-            is_walking = true;
-            if (is_facing_right)
+            if (Input.GetKey(KeyCode.LeftArrow))
             {
-                Flip();
+                transform.Translate(-moveSpeed * Time.deltaTime, 0.0f, 0.0f, Space.World);
+                is_walking = true;
+                if (is_facing_right)
+                {
+                    Flip();
+                }
             }
+            if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space))
+            {
+                Jump();
+            }
+            //Debug.DrawRay(transform.position, rayLength*Vector3.down,Color.white,1,false);
         }
-        if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space))
-        {
-            Jump();
-        }
-        //Debug.DrawRay(transform.position, rayLength*Vector3.down,Color.white,1,false);
-
-        animator.SetBool("is_grounded", IsGrounded());
-        animator.SetBool("is_walking", is_walking);
-        animator.SetBool("is_climbing", is_climbing);
-        vertical = Input.GetAxis("Vertical");
+            animator.SetBool("is_grounded", IsGrounded());
+            animator.SetBool("is_walking", is_walking);
+            animator.SetBool("is_climbing", is_climbing);
+            vertical = Input.GetAxis("Vertical");
+        
     }
 
     void Awake()

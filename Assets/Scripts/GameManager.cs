@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using System;
 using TMPro;
 
@@ -29,7 +30,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
             if(currentGameState== GameState.PAUSE_MENU)
             {
@@ -51,6 +52,7 @@ public class GameManager : MonoBehaviour
             {
                 keysTab[i].color=Color.grey;
             }
+            InGame();
         }
         else
         {
@@ -73,7 +75,15 @@ public class GameManager : MonoBehaviour
 
     void SetGameState(GameState newGameState)
     {
-        pauseMenuCanvas.enabled = false;
+        if (currentGameState == GameState.GAME)
+        {
+            pauseMenuCanvas.enabled = true;
+        }
+        else
+        {
+            pauseMenuCanvas.enabled = false;
+        }
+
         inGameCanvas.enabled = false;
         currentGameState = newGameState;
     }
@@ -95,6 +105,19 @@ public class GameManager : MonoBehaviour
     public void GameOver()
     {
         SetGameState(GameState.GAME_OVER);
+    }
+
+    public void OnResumeButtonClicked()
+    {
+        InGame();
+    }
+    public void OnRestartButtonClicked()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+    public void OnReturnToMainMenuButtonClicked()
+    {
+        SceneManager.LoadScene("MainMenu");
     }
     
 }
