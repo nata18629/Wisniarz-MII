@@ -14,7 +14,6 @@ public class PlayerController : MonoBehaviour
     private bool is_walking = false;
     private bool is_climbing = false;
     private float vertical;
-    private int lives = 3;
     private Vector2 start_pos;
 
     public LayerMask groundLayer;
@@ -86,16 +85,8 @@ public class PlayerController : MonoBehaviour
 
     void Kill()
     {
-        lives -= 1;
-        if (lives == 0)
-        {
-            Debug.Log("Game over");
-        }
-        else
-        {
-            Debug.Log("Lives left: " + lives);
-            transform.position = start_pos;
-        }
+        GameManager.instance.LoseLife();
+        transform.position = start_pos;
     }
 
     void OnTriggerEnter2D(Collider2D col)
@@ -117,7 +108,8 @@ public class PlayerController : MonoBehaviour
         {
             if (transform.position.y >= col.gameObject.transform.position.y)
             {
-                Debug.Log("Killed an enemy");
+                GameManager.instance.AddEnemyKilled();
+
             }
             else
             {
@@ -136,13 +128,12 @@ public class PlayerController : MonoBehaviour
         }
         if (col.CompareTag("Heart"))
         {
-            lives += 1;
-            Debug.Log("Heart found, lives: " + lives);
+            GameManager.instance.AddLife();
             col.gameObject.SetActive(false);
         }
         if (col.CompareTag("END"))
         {
-                Debug.Log("END");
+            GameManager.instance.LevelCompleted();
         }
         if (col.CompareTag("MovingPlatform"))
         {
