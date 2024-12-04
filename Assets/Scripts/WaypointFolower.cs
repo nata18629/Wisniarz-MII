@@ -5,7 +5,7 @@ using UnityEngine;
 public class WaypointFolower : MonoBehaviour
 {
     [SerializeField] private GameObject[] waypoints;
-    int currentWaypoint =0;
+    int currentWaypoint = 0;
     [SerializeField] private float speed = 1.0f;
     // Start is called before the first frame update
     void Start()
