@@ -8,7 +8,8 @@ public class GeneratedPlatforms : MonoBehaviour
     private int PLATFORMS_NUM = 8;
     private GameObject[] platforms;
     private Vector2[] positions;
-    private Vector3[] DstPositions;
+    private Vector2[] DstPositions;
+    private Vector2[] TmpPositions;
     [SerializeField] private float speed = 1.0f;
 
     // Start is called before the first frame update
@@ -20,25 +21,41 @@ public class GeneratedPlatforms : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector3[] DstPositions = new Vector3[PLATFORMS_NUM];
-        int j;
+        Vector2[] DstPositions = new Vector2[PLATFORMS_NUM];
+        int nextIndex;
+
+        // Calculate the destination positions for circular movement
         for (int i = 0; i < PLATFORMS_NUM; i++)
         {
-            j = i + 1;
-            if (j == PLATFORMS_NUM)
-            {
-                j = 0;
-            }
-            DstPositions[i] = new Vector3(
-                positions[j].x,
-                positions[j].y,
-                0
-                );
+            nextIndex = (i + 1) % PLATFORMS_NUM; // Ensure circular indexing
+            DstPositions[i] = new Vector2(
+                positions[nextIndex].x,
+                positions[nextIndex].y
+            );
         }
 
+        // Move platforms towards their calculated destinations
+        for (int i = 0; i < PLATFORMS_NUM; i++)
+        {
+            platforms[i].transform.position = Vector2.MoveTowards(
+                platforms[i].transform.position,
+                DstPositions[i],
+                speed * Time.deltaTime
+            );
+        }
 
-        for (int i = 0; i < PLATFORMS_NUM; i++) {
-            Vector3.MoveTowards(platforms[i].transform.position, DstPositions[i], speed * Time.deltaTime);
+        if (Vector2.Distance(platforms[0].transform.position, DstPositions[0]) < 0.1f)
+        {
+
+            for (int i = 0; i < PLATFORMS_NUM; i++)
+            {
+                nextIndex = (i + 1) % PLATFORMS_NUM;
+                TmpPositions[i] = positions[nextIndex];
+            }
+            for(int i = 0;i < PLATFORMS_NUM; i++)
+            {
+                positions[i] = TmpPositions[i];
+            }
         }
     }
 
@@ -49,6 +66,7 @@ public class GeneratedPlatforms : MonoBehaviour
 
         platforms = new GameObject[PLATFORMS_NUM];
         positions = new Vector2[PLATFORMS_NUM];
+        TmpPositions = new Vector2[PLATFORMS_NUM];
 
         for (int i = 0; i < PLATFORMS_NUM; i++)
         {
@@ -57,6 +75,7 @@ public class GeneratedPlatforms : MonoBehaviour
                 center.x + radius * Mathf.Cos(angle), // X-coordinate
                 center.y + radius * Mathf.Sin(angle)
                 );
+            TmpPositions[i]= positions[i];
         }
 
         for (int i = 0; i < PLATFORMS_NUM; i++)
