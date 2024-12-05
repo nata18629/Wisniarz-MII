@@ -83,9 +83,25 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void Kill()
+    void Kill(bool play_animation)
     {
+        animator.SetBool("is_hurt", play_animation);
         GameManager.instance.LoseLife();
+        StartCoroutine(Wait(play_animation));  
+    }
+
+    IEnumerator Wait(bool play_animation)
+    {
+        if (play_animation)
+        {
+            yield return new WaitForSeconds(0.8f);
+        }
+        else
+        {
+            yield return new WaitForSeconds(0.3f);
+        }
+        
+        animator.SetBool("is_hurt", false);
         transform.position = start_pos;
     }
 
@@ -93,7 +109,7 @@ public class PlayerController : MonoBehaviour
     {
         if (col.tag == "FallLevel")
         {
-            Kill();
+            Kill(false);
         }
         if (col.CompareTag("Bonus"))
         {
@@ -113,7 +129,7 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                Kill();
+                Kill(true);
             }
         }
         if (col.CompareTag("Key"))

@@ -221,6 +221,7 @@ public class GameManager : MonoBehaviour
     }
     public void OnReturnToMainMenuButtonClicked()
     {
+        Time.timeScale = 1;
         SceneManager.LoadScene("MainMenu");
     }
     
