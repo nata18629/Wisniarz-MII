@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour
     public TMP_Text highScoreText;
     public TMP_Text timeText;
     public TMP_Text enemiesKilledText;
+    public TMP_Text currentQualityName;
 
     static string keyHighScore = "HighScoreLevel1";
 
@@ -73,6 +74,8 @@ public class GameManager : MonoBehaviour
             InGame();
             livesTab[3].enabled = false;
             enemiesKilledText.text = enemies_killed.ToString();
+            currentQualityName.text = QualitySettings.names[QualitySettings.GetQualityLevel()];
+
             if (!PlayerPrefs.HasKey("HighScoreLevel1"))
             {
                 PlayerPrefs.SetInt("HighScoreLevel1",0);
@@ -92,11 +95,21 @@ public class GameManager : MonoBehaviour
         scoreText.text = score.ToString();
     }
 
-    public void AddKeys()
+    public void AddKeys(string name)
     {
-        keysTab[keys_found].color = Color.red;
+        switch (name)
+        {
+            case "gem R":
+                keysTab[keys_found].color = Color.red;
+                break;
+            case "gem G":
+                keysTab[keys_found].color = Color.green;
+                break;
+            case "gem B":
+                keysTab[keys_found].color = Color.blue;
+                break;
+        }
         keys_found++;
-        
     }
 
     public void AddEnemyKilled()
@@ -182,7 +195,10 @@ public class GameManager : MonoBehaviour
             score += lives_left * 100;
             SetGameState(GameState.LEVEL_COMPLETED);
         }
-        Debug.Log("Not all keys have been found.");
+        else
+        {
+            Debug.Log("Not all keys have been found.");
+        }
         
     }
     public void Options()
@@ -212,12 +228,28 @@ public class GameManager : MonoBehaviour
     }
     public void OnIncreaseButtonPressed()
     {
-        QualitySettings.IncreaseLevel();
+        int currentQualityLevel = QualitySettings.GetQualityLevel();
+        int maxQualityLevel = QualitySettings.names.Length - 1;
+        if (currentQualityLevel < maxQualityLevel)
+        {
+            QualitySettings.IncreaseLevel(true);
+            currentQualityName.text = QualitySettings.names[QualitySettings.GetQualityLevel()];
+        }
     }
     public void OnDecreaseButtonPressed()
     {
-        QualitySettings.DecreaseLevel();
+        int currentQualityLevel = QualitySettings.GetQualityLevel();
 
+        if (currentQualityLevel > 0)
+        {
+            QualitySettings.DecreaseLevel(true);
+            currentQualityName.text = QualitySettings.names[QualitySettings.GetQualityLevel()];
+        }
+
+    }
+    public void SetVolume(float volume)
+    {
+        AudioListener.volume = volume;
     }
     public void OnReturnToMainMenuButtonClicked()
     {

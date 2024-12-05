@@ -40,7 +40,7 @@ public class PlayerController : MonoBehaviour
         if (GameManager.instance.currentGameState == GameManager.GameState.GAME)
         {
             is_walking = false;
-            if (Input.GetKey(KeyCode.RightArrow))
+            if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
             {
                 transform.Translate(moveSpeed * Time.deltaTime, 0.0f, 0.0f, Space.World);
                 is_walking = true;
@@ -49,7 +49,7 @@ public class PlayerController : MonoBehaviour
                     Flip();
                 }
             }
-            if (Input.GetKey(KeyCode.LeftArrow))
+            if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
             {
                 transform.Translate(-moveSpeed * Time.deltaTime, 0.0f, 0.0f, Space.World);
                 is_walking = true;
@@ -58,7 +58,7 @@ public class PlayerController : MonoBehaviour
                     Flip();
                 }
             }
-            if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.Space))
             {
                 Jump();
             }
@@ -148,7 +148,7 @@ public class PlayerController : MonoBehaviour
         if (col.CompareTag("Key"))
         {
             source.PlayOneShot(keySound, AudioListener.volume);
-            GameManager.instance.AddKeys();
+            GameManager.instance.AddKeys(col.gameObject.name);
             col.gameObject.SetActive(false);
 
             //if (keys_found == KEYS_NUM)
