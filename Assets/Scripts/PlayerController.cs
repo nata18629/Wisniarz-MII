@@ -16,6 +16,14 @@ public class PlayerController : MonoBehaviour
     private float vertical;
     private Vector2 start_pos;
 
+    // sound
+    [SerializeField] private AudioClip bonusSound;
+    [SerializeField] private AudioClip hurtSound;
+    [SerializeField] private AudioClip jumpSound;
+    [SerializeField] private AudioClip enemykillSound;
+    [SerializeField] private AudioClip keySound;
+    private AudioSource source;
+
     public LayerMask groundLayer;
     const float rayLength = 1.2f;
     const int KEYS_NUM = 3;
@@ -67,7 +75,8 @@ public class PlayerController : MonoBehaviour
     {
         rigidBody = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
-        start_pos=transform.position;
+        start_pos = transform.position;
+        source = GetComponent<AudioSource>();
     }
 
     bool IsGrounded()
@@ -79,6 +88,7 @@ public class PlayerController : MonoBehaviour
     {
         if(IsGrounded())
         {
+            source.PlayOneShot(jumpSound, AudioListener.volume);
             rigidBody.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
         }
     }
@@ -87,6 +97,7 @@ public class PlayerController : MonoBehaviour
     {
         animator.SetBool("is_hurt", play_animation);
         GameManager.instance.LoseLife();
+        source.PlayOneShot(hurtSound, AudioListener.volume);
         StartCoroutine(Wait(play_animation));  
     }
 
@@ -113,6 +124,7 @@ public class PlayerController : MonoBehaviour
         }
         if (col.CompareTag("Bonus"))
         {
+            source.PlayOneShot(bonusSound, AudioListener.volume);
             GameManager.instance.AddPoints(100);
             col.gameObject.SetActive(false);
         }
@@ -124,6 +136,7 @@ public class PlayerController : MonoBehaviour
         {
             if (transform.position.y >= col.gameObject.transform.position.y)
             {
+                source.PlayOneShot(enemykillSound, AudioListener.volume);
                 GameManager.instance.AddEnemyKilled();
 
             }
@@ -134,6 +147,7 @@ public class PlayerController : MonoBehaviour
         }
         if (col.CompareTag("Key"))
         {
+            source.PlayOneShot(keySound, AudioListener.volume);
             GameManager.instance.AddKeys();
             col.gameObject.SetActive(false);
 
