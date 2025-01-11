@@ -61,8 +61,8 @@ public class GeneratedPlatforms : MonoBehaviour
 
     void Awake()
     {
-        Vector2 center = new Vector2(21.0f, 21.0f);
-        float radius = 5.0f;
+        Vector2 center = new Vector2(17.0f, 21.0f);
+        float radius = 8.0f;
 
         platforms = new GameObject[PLATFORMS_NUM];
         positions = new Vector2[PLATFORMS_NUM];

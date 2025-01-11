@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
-    private Animator animator;
+    protected Animator animator;
     private bool is_facing_right = false;
-    [Range(0.01f, 20.0f)][SerializeField] private float moveSpeed = 0.1f;
-    [Range(0.1f, 20.0f)][SerializeField] private float moveRange = 1f;
+    [Range(0.01f, 20.0f)][SerializeField] protected float moveSpeed = 0.1f;
+    [Range(0.1f, 20.0f)][SerializeField] protected float moveRange = 1f;
     private float start_posx;
-    private bool is_moving_right = false;
+    protected bool is_moving_right = false;
+    protected float wait_to_die = 0.45f;
 
     // Start is called before the first frame update
     void Start()
@@ -51,7 +52,7 @@ public class EnemyController : MonoBehaviour
         animator = GetComponent<Animator>();
         start_posx=this.transform.position.x;
     }
-    void Flip()
+    protected void Flip()
     {
         is_facing_right = !is_facing_right;
         Vector3 the_scale = transform.localScale;
@@ -59,11 +60,11 @@ public class EnemyController : MonoBehaviour
         transform.localScale = the_scale;
 
     }
-    void MoveLeft()
+    protected void MoveLeft()
     {
         transform.Translate(-moveSpeed * Time.deltaTime, 0.0f, 0.0f, Space.World);
     }
-    void MoveRight()
+    protected void MoveRight()
     {
         transform.Translate(moveSpeed * Time.deltaTime, 0.0f, 0.0f, Space.World);
     }
@@ -71,16 +72,16 @@ public class EnemyController : MonoBehaviour
     {
         if (col.CompareTag("Player"))
         {
-            if (transform.position.y <= col.gameObject.transform.position.y)
+            if (transform.position.y +1.0f<= col.gameObject.transform.position.y)
             {
                 animator.SetBool("is_dead", true);
                 StartCoroutine(KillOnAnimationEnd());
             }
         }
     }
-    IEnumerator KillOnAnimationEnd()
+    protected IEnumerator KillOnAnimationEnd()
     {
-        yield return new WaitForSeconds(0.4f);
+        yield return new WaitForSeconds(wait_to_die);
         gameObject.SetActive(false);
     }
 }

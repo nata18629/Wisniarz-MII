@@ -134,11 +134,15 @@ public class PlayerController : MonoBehaviour
         }
         if (col.CompareTag("Enemy"))
         {
-            if (transform.position.y >= col.gameObject.transform.position.y)
+            
+            if (transform.position.y >= col.gameObject.transform.position.y+1.0f)
             {
+                Debug.Log("enemy y: " + transform.position.y + " player y " + col.gameObject.transform.position.y);
                 source.PlayOneShot(enemykillSound, AudioListener.volume);
                 GameManager.instance.AddEnemyKilled();
-
+                rigidBody.velocity = Vector2.zero;
+                rigidBody.AddForce(new Vector2(0.0f,jumpForce),ForceMode2D.Impulse);
+                Jump();
             }
             else
             {
