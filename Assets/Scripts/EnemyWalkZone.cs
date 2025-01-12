@@ -4,17 +4,22 @@ using UnityEngine;
 
 public class EnemyWalkZone : MonoBehaviour
 {
+    private Dino dino;
     // Update is called once per frame
     void Update()
     {
         
+    }
+    void Awake()
+    {
+        dino = transform.parent.GetComponentInChildren<Dino>();
     }
 
     void OnTriggerEnter2D(Collider2D col)
     {
         if (col.CompareTag("Player"))
         {
-            GameObject.Find("DinoSprite").gameObject.GetComponent<Animator>().SetBool("is_running", true);
+            dino.gameObject.GetComponent<Animator>().SetBool("is_running", true);
         }
     }
 
@@ -22,7 +27,8 @@ public class EnemyWalkZone : MonoBehaviour
     {
         if (col.CompareTag("Player"))
         {
-            GameObject.Find("DinoSprite").gameObject.GetComponent<Dino>().RunToPlayer(col);
+
+            dino.gameObject.GetComponent<Dino>().RunToPlayer(col);
         }
     }
 
@@ -30,9 +36,9 @@ public class EnemyWalkZone : MonoBehaviour
     {
         if (col.CompareTag("Player"))
         {
-            if (GameObject.Find("DinoSprite").gameObject)
+            if (dino.gameObject)
             {
-                GameObject.Find("DinoSprite").gameObject.GetComponent<Animator>().SetBool("is_running", false);
+                dino.gameObject.GetComponent<Animator>().SetBool("is_running", false);
             }
 
         }
