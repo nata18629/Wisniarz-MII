@@ -72,7 +72,7 @@ public class EnemyController : MonoBehaviour
     {
         if (col.CompareTag("Player"))
         {
-            if (transform.position.y +1.0f<= col.gameObject.transform.position.y)
+            if (transform.position.y +1.0f<= col.gameObject.transform.position.y && !col.gameObject.GetComponent<Animator>().GetBool("is_hurt"))
             {
                 animator.SetBool("is_dead", true);
                 StartCoroutine(KillOnAnimationEnd());

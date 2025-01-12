@@ -37,7 +37,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (GameManager.instance.currentGameState == GameManager.GameState.GAME)
+        if (GameManager.instance.currentGameState == GameManager.GameState.GAME && !animator.GetBool("is_hurt"))
         {
             is_walking = false;
             if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
@@ -96,9 +96,9 @@ public class PlayerController : MonoBehaviour
     void Kill(bool play_animation)
     {
         animator.SetBool("is_hurt", play_animation);
-        GameManager.instance.LoseLife();
         source.PlayOneShot(hurtSound, AudioListener.volume);
-        StartCoroutine(Wait(play_animation));  
+        StartCoroutine(Wait(play_animation));
+        GameManager.instance.LoseLife();
     }
 
     IEnumerator Wait(bool play_animation)
@@ -132,17 +132,20 @@ public class PlayerController : MonoBehaviour
         {
             is_climbing = true;
         }
-        if (col.CompareTag("Enemy"))
+        if (col.CompareTag("Enemy") && !animator.GetBool("is_hurt"))
         {
             
             if (transform.position.y >= col.gameObject.transform.position.y+1.0f)
             {
-                Debug.Log("enemy y: " + transform.position.y + " player y " + col.gameObject.transform.position.y);
-                source.PlayOneShot(enemykillSound, AudioListener.volume);
-                GameManager.instance.AddEnemyKilled();
-                rigidBody.velocity = Vector2.zero;
-                rigidBody.AddForce(new Vector2(0.0f,jumpForce),ForceMode2D.Impulse);
-                Jump();
+                if (!col.gameObject.GetComponent<Animator>().GetBool("is_dead"))
+                {
+                    source.PlayOneShot(enemykillSound, AudioListener.volume);
+                    GameManager.instance.AddEnemyKilled();
+                    rigidBody.velocity = Vector2.zero;
+                    rigidBody.AddForce(new Vector2(0.0f, jumpForce), ForceMode2D.Impulse);
+                    Jump();
+                }
+               
             }
             else
             {

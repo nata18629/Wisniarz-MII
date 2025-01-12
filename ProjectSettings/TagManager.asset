@@ -13,6 +13,7 @@ TagManager:
   - END
   - MovingPlatform
   - EnemyWalkZone
+  - Lever
   layers:
   - Default
   - TransparentFX
